@@ -55,9 +55,14 @@ body {
   width: 120px;
 }
 
-.score-container {
+.scoreTable {
+  display: flex;
+  justify-content: space-evenly;
   background-color: #f2f2f2;
-  padding: 18px 158px 23px 159px;
+}
+
+.score-container {
+  padding: 18px 0px 23px 0px;
   text-align: center;
   font-size: 32px;
 }

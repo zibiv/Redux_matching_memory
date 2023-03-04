@@ -45,6 +45,7 @@ export const boardReducer = (state = initialState, action) => {
           flipState[index1] = { ...card1, visible: false, matched: true };
           flipState[index2] = { ...card2, visible: false, matched: true };
         }
+
       }
 
       return flipState;

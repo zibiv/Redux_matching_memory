@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // Add import statements below
 import { selectVisibleIDs, selectMatchedIDs, resetCards, flipCard } from '../../boardSlice';
-
+import { addScore } from '../../../score/scoreReducer';
 let cardLogo = "https://static-assets.codecademy.com/Courses/Learn-Redux/matching-game/codecademy_logo.png";
 
 export const Card = ({ id, contents }) => {
@@ -19,6 +19,11 @@ export const Card = ({ id, contents }) => {
 
   let cardStyle = 'resting'
   let click = () => flipHandler(id);
+
+  const unitedClicker = () => {
+    click();
+    if(visibleIDs.length === 1)dispatch(addScore());
+  }
   
   let cardText = (
     <img src={cardLogo} className="logo-placeholder" alt="Card option" />
@@ -46,7 +51,7 @@ export const Card = ({ id, contents }) => {
   }
 
   return (
-    <button onClick={click} className={`card ${cardStyle}`}>
+    <button onClick={unitedClicker} className={`card ${cardStyle}`}>
       {cardText}
     </button>
   );
