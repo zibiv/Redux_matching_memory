@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // Add import statements below
-import { selectVisibleIDs, selectMatchedIDs, resetCards, flipCard } from '../../boardSlice';
-import { addScore } from '../../../score/scoreReducer';
+import { selectVisibleIDs, selectMatchedIDs, boardSlice } from '../../boardSlice';
+import { scoreSlice } from '../../../score/scoreReducer';
 let cardLogo = "https://static-assets.codecademy.com/Courses/Learn-Redux/matching-game/codecademy_logo.png";
 
 export const Card = ({ id, contents }) => {
@@ -14,7 +14,7 @@ export const Card = ({ id, contents }) => {
   // flip card action
   const flipHandler = (id) => {
     // Add action dispatch below
-    dispatch(flipCard(id));
+    dispatch(boardSlice.actions.flipCard(id));
   };
 
   let cardStyle = 'resting'
@@ -22,7 +22,7 @@ export const Card = ({ id, contents }) => {
 
   const unitedClicker = () => {
     click();
-    if(visibleIDs.length === 1)dispatch(addScore());
+    if(visibleIDs.length === 1)dispatch(scoreSlice.actions.add());
   }
   
   let cardText = (
@@ -46,7 +46,7 @@ export const Card = ({ id, contents }) => {
   // implement number of flipped cards check
   // позволяет просматривать максимум две карты одновременно 
   if (visibleIDs.length === 2) {
-    click = () => dispatch(resetCards());
+    click = () => dispatch(boardSlice.actions.resetCards());
     if(!matchedIDs.includes(id)) cardStyle = 'no-match';
   }
 

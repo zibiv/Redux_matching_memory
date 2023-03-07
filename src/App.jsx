@@ -3,8 +3,8 @@ import React from 'react';
 import { Score } from './features/score/Score.jsx';
 import { Board } from './features/board/Board.jsx';
 // Add import statements below
-import { setBoard, resetCards } from './features/board/boardSlice'
-import { resetScore } from './features/score/scoreReducer.js';
+import { setBoard, resetCards, boardSlice } from './features/board/boardSlice'
+import { scoreSlice } from './features/score/scoreReducer.js';
 import { useDispatch } from 'react-redux';
 
 
@@ -16,12 +16,12 @@ const App = () => {
   const startGameHandler = () => {
     // Add action dispatch below
     dispatch(setBoard());
-    dispatch(resetScore());
+    dispatch(scoreSlice.actions.reset());
   };
 
   const tryAgainHandler = () => {
     // Add action dispatch below
-    dispatch(resetCards());
+    dispatch(boardSlice.actions.resetCards());
   };
 
   return (

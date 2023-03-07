@@ -1,11 +1,11 @@
-import { combineReducers, createStore } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 
-import { boardReducer } from '../features/board/boardSlice.js';
-import { scoreReducer } from '../features/score/scoreReducer.js';
+import { boardSlice } from '../features/board/boardSlice.js';
+import { scoreSlice } from '../features/score/scoreReducer.js';
 
-const rootReducer = combineReducers({
-  board: boardReducer,
-  score: scoreReducer
+export const store = configureStore({
+  reducer:{
+    board: boardSlice.reducer,
+    score: scoreSlice.reducer
+  }
 });
-
-export const store = createStore(rootReducer);

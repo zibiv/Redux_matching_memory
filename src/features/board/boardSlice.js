@@ -1,3 +1,5 @@
+import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = [
   { id: 0, contents: 'Provider', visible: true, matched: true },
   { id: 1, contents: 'Provider', visible: true, matched: true },
@@ -13,6 +15,90 @@ const initialState = [
   { id: 11, contents: 'react-redux', visible: true, matched: true },
 ];
 
+const wordPairs = [
+  'Provider',
+  'Provider',
+  'selector',
+  'selector',
+  'useSelector()',
+  'useSelector()',
+  'useDispatch()',
+  'useDispatch()',
+  'Pure Function',
+  'Pure Function',
+  'react-redux',
+  'react-redux',
+];
+
+//перемешивает слова из массива wordPairs в рандомном порядке
+const randomWords = () => {
+  let words = [];
+  let newWordPairs = [...wordPairs];
+  const reps = newWordPairs.length;
+  for (let i = 0; i < reps; i++) {
+    const wordIndex = Math.floor(Math.random() * newWordPairs.length);
+    words.push(newWordPairs[wordIndex]);
+    newWordPairs.splice(wordIndex, 1);
+  }
+
+  return words;
+};
+
+const optionsBoardSlice = {
+  name: 'board',
+  initialState: initialState,
+  reducers: {
+    setBoard:{
+      reducer:  (state, action) => {
+        let setState = [];
+        //перебираем полученный из действия массив слов
+        action.payload.forEach((element, index) =>
+          //добавляем в массив setState объект который содержит необходимые данные для формирования карточки
+          setState.push({
+            id: index,
+            contents: element,
+            visible: false,
+            matched: false,
+          })
+        );
+        return setState;
+      },
+      prepare: () => {
+        const words = randomWords();
+        return {payload: words}
+      }
+    },
+    flipCard: (state, action) => {
+      let flipState = [...state];
+      const cardID = action.payload;
+      flipState[cardID] = { ...state[cardID], visible: true };
+      console.log(flipState[cardID]);
+
+      const [index1, index2] = flipState
+        .filter((card) => card.visible)
+        .map((card) => card.id);
+      console.log(index1, index2);
+      if (index2 !== undefined) {
+        const card1 = flipState[index1];
+        const card2 = flipState[index2];
+        if (card1.contents === card2.contents) {
+          flipState[index1] = { ...card1, visible: false, matched: true };
+          flipState[index2] = { ...card2, visible: false, matched: true };
+        }
+
+      }
+
+      return flipState;
+    },
+    resetCards: (state) => {
+      return state.map((card) => ({ ...card, visible: false }));
+    }
+  }
+}
+
+export const boardSlice = createSlice(optionsBoardSlice);
+
+// подход без использования toolkit
 export const boardReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'board/setBoard':
@@ -56,34 +142,7 @@ export const boardReducer = (state = initialState, action) => {
   }
 };
 
-const wordPairs = [
-  'Provider',
-  'Provider',
-  'selector',
-  'selector',
-  'useSelector()',
-  'useSelector()',
-  'useDispatch()',
-  'useDispatch()',
-  'Pure Function',
-  'Pure Function',
-  'react-redux',
-  'react-redux',
-];
 
-//перемешивает слова из массива wordPairs в рандомном порядке
-const randomWords = () => {
-  let words = [];
-  let newWordPairs = [...wordPairs];
-  const reps = newWordPairs.length;
-  for (let i = 0; i < reps; i++) {
-    const wordIndex = Math.floor(Math.random() * newWordPairs.length);
-    words.push(newWordPairs[wordIndex]);
-    newWordPairs.splice(wordIndex, 1);
-  }
-
-  return words;
-};
 
 // action creators
 export const setBoard = () => {
