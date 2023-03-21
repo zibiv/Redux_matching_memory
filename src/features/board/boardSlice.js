@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 const initialState = [
   { id: 0, contents: 'Provider', visible: true, matched: true },
@@ -98,6 +98,24 @@ const optionsBoardSlice = {
 
 export const boardSlice = createSlice(optionsBoardSlice);
 
+// Add selector export statments below
+export const selectBoard = (store) =>
+  store.board.map((card) => {
+    return { id: card.id, contents: card.contents };
+  });
+
+export const selectVisibleIDs = (store) => {
+  return store.board.filter((card) => card.visible).map((card) => card.id);
+};
+
+// export const selectMatchedIDs = (store) => {
+//   return store.board.filter((card) => card.matched).map((card) => card.id);
+// }
+export const selectMatchedIDs = createSelector(
+  (store) => store.board,
+  (board) => board.filter((card) => card.matched).map((card) => card.id), 
+)
+
 // подход без использования toolkit
 export const boardReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -167,16 +185,3 @@ export const resetCards = (indices) => {
   };
 };
 
-// Add selector export statments below
-export const selectBoard = (store) =>
-  store.board.map((card) => {
-    return { id: card.id, contents: card.contents };
-  });
-
-export const selectVisibleIDs = (store) => {
-  return store.board.filter((card) => card.visible).map((card) => card.id);
-};
-
-export const selectMatchedIDs = (store) => {
-  return store.board.filter((card) => card.matched).map((card) => card.id);
-}
